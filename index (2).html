@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Ronald V. Edwards II — Security Analyst & Founder</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Mono:ital,wght@0,300;0,400;1,300&family=Fraunces:ital,opsz,wght@0,9..144,300;1,9..144,300&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --bg: #0a0a0a;
+    --surface: #111111;
+    --surface2: #181818;
+    --border: rgba(255,255,255,0.07);
+    --text: #e8e6e1;
+    --muted: #666;
+    --accent: #c8f55a;
+    --accent2: #5af5c8;
+    --font-display: 'Syne', sans-serif;
+    --font-body: 'Fraunces', serif;
+    --font-mono: 'DM Mono', monospace;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--font-body);
+    font-weight: 300;
+    font-size: 17px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1.5rem 4rem;
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    background: rgba(10,10,10,0.8);
+    border-bottom: 1px solid var(--border);
+    transition: padding 0.3s ease;
+  }
+  .nav-logo {
+    font-family: var(--font-display);
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .nav-links {
+    display: flex;
+    gap: 2.5rem;
+    list-style: none;
+  }
+  .nav-links a {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* ── HERO ── */
+  #hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 0 4rem 6rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-bg {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 80% 20%, rgba(200,245,90,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 60% at 10% 80%, rgba(90,245,200,0.04) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .hero-tag {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeUp 0.7s ease 0.3s forwards;
+  }
+  .hero-name {
+    font-family: var(--font-display);
+    font-size: clamp(3.5rem, 8vw, 8rem);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: var(--text);
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeUp 0.8s ease 0.5s forwards;
+    margin-bottom: 2rem;
+  }
+  .hero-name span { color: var(--accent); display: block; }
+  .hero-desc {
+    max-width: 520px;
+    color: var(--muted);
+    font-size: 1rem;
+    line-height: 1.8;
+    opacity: 0;
+    transform: translateY(15px);
+    animation: fadeUp 0.8s ease 0.7s forwards;
+    margin-bottom: 3rem;
+  }
+  .hero-cta {
+    display: flex;
+    gap: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.9s forwards;
+  }
+  .btn {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    padding: 0.85rem 2rem;
+    border-radius: 3px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary { background: var(--accent); color: #0a0a0a; }
+  .btn-primary:hover {
+    background: #d6ff6e;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(200,245,90,0.25);
+  }
+  .btn-ghost {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-ghost:hover {
+    border-color: rgba(255,255,255,0.25);
+    transform: translateY(-2px);
+  }
+  .scroll-indicator {
+    position: absolute;
+    bottom: 2.5rem; right: 4rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0;
+    animation: fadeIn 1s ease 1.5s forwards;
+  }
+  .scroll-indicator span {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    writing-mode: vertical-rl;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--muted), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  /* ── SECTIONS ── */
+  section { padding: 8rem 4rem; border-top: 1px solid var(--border); }
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1rem;
+  }
+  .section-title {
+    font-family: var(--font-display);
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-bottom: 3rem;
+  }
+
+  /* ── ABOUT ── */
+  #about .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: start;
+    max-width: 1100px;
+  }
+  .about-text p {
+    color: rgba(232,230,225,0.75);
+    margin-bottom: 1.2rem;
+    font-size: 1.05rem;
+  }
+  .about-facts {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    padding-top: 1rem;
+  }
+  .fact {
+    display: flex;
+    gap: 1.5rem;
+    padding: 1.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition: border-color 0.25s, transform 0.25s;
+  }
+  .fact:hover { border-color: rgba(200,245,90,0.3); transform: translateX(4px); }
+  .fact-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .fact-content { display: flex; flex-direction: column; gap: 0.2rem; }
+  .fact-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .fact-value {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  /* ── PROJECT ── */
+  #project {
+    background: linear-gradient(180deg, var(--bg) 0%, var(--surface) 50%, var(--bg) 100%);
+  }
+  .project-header { max-width: 700px; margin-bottom: 4rem; }
+  .project-header p { color: var(--muted); font-size: 1.05rem; line-height: 1.8; }
+  .project-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    max-width: 1100px;
+    transition: border-color 0.3s;
+  }
+  .project-card:hover { border-color: rgba(200,245,90,0.2); }
+
+  /* ── DIAGRAM ── */
+  .project-visual {
+    width: 100%;
+    height: 380px;
+    background:
+      radial-gradient(ellipse 50% 80% at 50% 50%, rgba(200,245,90,0.08) 0%, transparent 70%),
+      var(--surface2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+    gap: 2rem;
+  }
+  .diagram-label {
+    font-family: var(--font-mono);
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .diagram {
+    display: flex;
+    align-items: center;
+    gap: 0;
+  }
+  .d-node { display: flex; flex-direction: column; align-items: center; gap: 0.6rem; }
+  .d-box {
+    padding: 0.7rem 1.4rem;
+    border-radius: 6px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.9rem;
+    letter-spacing: 0.05em;
+    white-space: nowrap;
+  }
+  .d-box.company  { background: rgba(200,245,90,0.12);  border: 1px solid rgba(200,245,90,0.4);  color: var(--accent); }
+  .d-box.framework{ background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.2); color: var(--text); }
+  .d-box.platform { background: rgba(90,245,200,0.1);   border: 1px solid rgba(90,245,200,0.4);  color: var(--accent2); }
+  .d-label {
+    font-family: var(--font-mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .d-arrow {
+    width: 48px;
+    height: 1px;
+    background: linear-gradient(to right, rgba(255,255,255,0.15), rgba(255,255,255,0.05));
+    position: relative;
+    flex-shrink: 0;
+    margin: 0 0.5rem;
+    margin-bottom: 1.5rem;
+  }
+  .d-arrow::after {
+    content: '';
+    position: absolute;
+    right: 0; top: -3px;
+    width: 0; height: 0;
+    border-top: 4px solid transparent;
+    border-bottom: 4px solid transparent;
+    border-left: 6px solid rgba(255,255,255,0.15);
+  }
+
+  /* Veros internals callout */
+  .veros-internals {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  .veros-sub {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.4rem;
+  }
+  .veros-sub-box {
+    padding: 0.4rem 0.9rem;
+    border-radius: 4px;
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    white-space: nowrap;
+    background: rgba(90,245,200,0.06);
+    border: 1px dashed rgba(90,245,200,0.25);
+    color: rgba(90,245,200,0.7);
+  }
+  .veros-sub-label {
+    font-family: var(--font-mono);
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(90,245,200,0.4);
+  }
+  .veros-divider {
+    width: 1px;
+    height: 36px;
+    background: rgba(90,245,200,0.2);
+  }
+
+  /* ── PROJECT BODY ── */
+  .project-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    padding: 3rem;
+  }
+  .project-info h3 {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+  .project-tag-line {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.5rem;
+  }
+  .project-info p {
+    color: rgba(232,230,225,0.7);
+    font-size: 0.97rem;
+    margin-bottom: 1rem;
+    line-height: 1.8;
+  }
+  .project-tags { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.8rem;
+    border-radius: 3px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+  }
+  .project-components h4 {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1.2rem;
+  }
+  .component-item {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .component-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+  .comp-accent { width: 3px; border-radius: 2px; flex-shrink: 0; margin-top: 0.2rem; }
+  .comp-accent.aether  { background: var(--accent); }
+  .comp-accent.veros   { background: var(--accent2); }
+  .comp-name { font-family: var(--font-display); font-size: 0.95rem; font-weight: 700; margin-bottom: 0.2rem; }
+  .comp-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+
+  /* ── SKILLS ── */
+  #skills .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    max-width: 1100px;
+  }
+  .skill-group {
+    padding: 2rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: border-color 0.25s, transform 0.25s;
+  }
+  .skill-group:hover { border-color: rgba(200,245,90,0.2); transform: translateY(-3px); }
+  .skill-group-title {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 1.2rem;
+  }
+  .skill-list { display: flex; flex-direction: column; gap: 0.7rem; }
+  .skill-item { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+  .skill-name { font-family: var(--font-mono); font-size: 0.82rem; color: rgba(232,230,225,0.8); }
+  .skill-bar { flex: 1; height: 2px; background: var(--surface2); border-radius: 1px; overflow: hidden; }
+  .skill-fill {
+    height: 100%;
+    background: linear-gradient(to right, var(--accent2), var(--accent));
+    border-radius: 1px;
+    width: 0;
+    transition: width 1.2s cubic-bezier(0.25, 1, 0.5, 1);
+  }
+
+  /* ── CONTACT ── */
+  #contact { background: var(--surface); }
+  .contact-layout {
+    display: grid;
+    grid-template-columns: 1fr 1.2fr;
+    gap: 6rem;
+    max-width: 1100px;
+    align-items: start;
+  }
+  .contact-intro p { color: var(--muted); margin-bottom: 2rem; font-size: 1rem; line-height: 1.8; }
+  .contact-links { display: flex; flex-direction: column; gap: 1rem; }
+  .contact-link {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    text-decoration: none;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    letter-spacing: 0.06em;
+    transition: border-color 0.25s, color 0.25s;
+  }
+  .contact-link:hover { border-color: rgba(200,245,90,0.3); color: var(--accent); }
+  .contact-link-icon { font-size: 1.1rem; }
+
+  /* ── FORM ── */
+  .form { display: flex; flex-direction: column; gap: 1.2rem; }
+  .form-group { display: flex; flex-direction: column; gap: 0.4rem; }
+  .form-label {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .form-input, .form-textarea {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    padding: 0.85rem 1rem;
+    color: var(--text);
+    font-family: var(--font-body);
+    font-size: 0.95rem;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  .form-input:focus, .form-textarea:focus { border-color: rgba(200,245,90,0.4); }
+  .form-textarea { resize: vertical; min-height: 130px; line-height: 1.6; }
+  .form-submit { align-self: flex-start; font-size: 0.9rem; padding: 0.95rem 2.5rem; cursor: pointer; }
+  .form-note { font-family: var(--font-mono); font-size: 0.7rem; color: var(--muted); margin-top: -0.5rem; }
+
+  /* ── FOOTER ── */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 2.5rem 4rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .footer-left {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+  }
+  .footer-left span { color: var(--accent); }
+  .footer-right {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeIn {
+    to { opacity: 1; }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 1; transform: scaleY(1); }
+    50% { opacity: 0.4; transform: scaleY(0.7); transform-origin: top; }
+  }
+  .reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    nav { padding: 1.2rem 2rem; }
+    .nav-links { gap: 1.5rem; }
+    #hero { padding: 0 2rem 5rem; }
+    section { padding: 5rem 2rem; }
+    #about .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .project-body { grid-template-columns: 1fr; gap: 2.5rem; }
+    .contact-layout { grid-template-columns: 1fr; gap: 3rem; }
+    footer { flex-direction: column; gap: 1rem; text-align: center; padding: 2rem; }
+    .hero-name { font-size: clamp(2.8rem, 12vw, 5rem); }
+    .diagram { transform: scale(0.72); transform-origin: center; }
+    .veros-internals { transform: scale(0.85); transform-origin: center; }
+  }
+  @media (max-width: 600px) {
+    nav { padding: 1rem 1.5rem; }
+    .nav-links { display: none; }
+    #hero { padding: 0 1.5rem 4rem; }
+    section { padding: 4rem 1.5rem; }
+    .hero-cta { flex-direction: column; gap: 1rem; }
+    .project-visual { height: 300px; }
+    .diagram { transform: scale(0.5); }
+    .veros-internals { transform: scale(0.7); }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a class="nav-logo" href="#hero">RVE<span style="color:var(--accent)">II</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#project">Intangybl</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <p class="hero-tag">Security Analyst · Founder · Builder</p>
+  <h1 class="hero-name">Ronald V.<span>Edwards II</span></h1>
+  <p class="hero-desc">
+    IT Security Analyst and founder of Intangybl — building AI-powered security awareness training
+    that adapts to how people actually behave, not how they're assumed to.
+  </p>
+  <div class="hero-cta">
+    <a class="btn btn-primary" href="#project">View Intangybl</a>
+    <a class="btn btn-ghost" href="#contact">Get in Touch</a>
+  </div>
+  <div class="scroll-indicator">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about">
+  <p class="section-label reveal">01 — About</p>
+  <h2 class="section-title reveal reveal-delay-1">Security isn't just<br>technical — it's human.</h2>
+  <div class="about-grid">
+    <div class="about-text reveal reveal-delay-2">
+      <p>
+        I'm a CompTIA Security+-certified IT Security Analyst based in Philadelphia, PA.
+        My work sits at the intersection of technical security practice and the human
+        decisions that either protect or expose an organization.
+      </p>
+      <p>
+        That perspective led me to build Intangybl — a startup focused on enterprise
+        security awareness training that uses behavioral profiling and AI-driven
+        simulations to actually change how people respond to social engineering attacks.
+      </p>
+      <p>
+        My background spans hands-on lab work (Kali Linux, Python scripting, penetration testing)
+        and governance frameworks (GRC, NIST CSF, COSO ERM, SEC disclosure requirements).
+        Most candidates are strong in one lane. I've built fluency in both.
+      </p>
+      <p>
+        Long term, I'm building toward CISO, founder, and strategic advisor roles —
+        proving that the best security leaders understand the board room and the terminal.
+      </p>
+    </div>
+    <div class="about-facts reveal reveal-delay-3">
+      <div class="fact">
+        <div class="fact-icon">🎯</div>
+        <div class="fact-content">
+          <span class="fact-label">Certification</span>
+          <span class="fact-value">CompTIA Security+</span>
+        </div>
+      </div>
+      <div class="fact">
+        <div class="fact-icon">📍</div>
+        <div class="fact-content">
+          <span class="fact-label">Location</span>
+          <span class="fact-value">Philadelphia, PA</span>
+        </div>
+      </div>
+      <div class="fact">
+        <div class="fact-icon">🏗️</div>
+        <div class="fact-content">
+          <span class="fact-label">Current Role</span>
+          <span class="fact-value">Founder, Intangybl</span>
+        </div>
+      </div>
+      <div class="fact">
+        <div class="fact-icon">🔭</div>
+        <div class="fact-content">
+          <span class="fact-label">Career Target</span>
+          <span class="fact-value">CISO · Founder · Strategic Advisor</span>
+        </div>
+      </div>
+      <div class="fact">
+        <div class="fact-icon">🌐</div>
+        <div class="fact-content">
+          <span class="fact-label">Community</span>
+          <span class="fact-value">Diversitech Philadelphia</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROJECT: INTANGYBL -->
+<section id="project">
+  <div class="project-header">
+    <p class="section-label reveal">02 — Featured Project</p>
+    <h2 class="section-title reveal reveal-delay-1">Intangybl</h2>
+    <p class="reveal reveal-delay-2">
+      Enterprise security awareness training that goes beyond phishing tests and
+      click-through modules. Veros — Intangybl's simulation platform — builds a behavioral
+      profile for each user and deploys personalized social engineering attacks they've
+      never seen before, all governed by the Aether Behavioral Framework.
+    </p>
+  </div>
+
+  <div class="project-card reveal reveal-delay-2">
+    <!-- Architecture Diagram -->
+    <div class="project-visual">
+      <div class="diagram-label">Product Architecture</div>
+      <div class="diagram">
+        <div class="d-node">
+          <div class="d-box company">Intangybl</div>
+          <div class="d-label">Company</div>
+        </div>
+        <div class="d-arrow"></div>
+        <div class="d-node">
+          <div class="d-box framework">Aether</div>
+          <div class="d-label">Behavioral Framework</div>
+        </div>
+        <div class="d-arrow"></div>
+        <div class="d-node">
+          <div class="d-box platform">Veros</div>
+          <div class="d-label">Simulation Platform</div>
+        </div>
+      </div>
+      <!-- Veros internals -->
+      <div class="veros-internals">
+        <div class="veros-sub">
+          <div class="veros-sub-box">Behavioral Profiling</div>
+          <div class="veros-sub-label">Veros · Layer 01</div>
+        </div>
+        <div class="veros-divider"></div>
+        <div class="veros-sub">
+          <div class="veros-sub-box">Attack Engine</div>
+          <div class="veros-sub-label">Veros · Layer 02</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Body -->
+    <div class="project-body">
+      <div class="project-info">
+        <h3>How it works</h3>
+        <p class="project-tag-line">Behavioral AI · Social Engineering · Enterprise SaaS</p>
+        <p>
+          Traditional security training assumes every employee is the same risk.
+          Veros doesn't. The platform builds a behavioral profile for each user —
+          tracking how they process, respond, and rationalize decisions under pressure —
+          then uses that profile to deploy social engineering simulations specifically
+          calibrated to their patterns.
+        </p>
+        <p>
+          Veros encompasses both functions in one platform: behavioral profiling and
+          the attack engine. Powered by the Aether Behavioral Framework — it governs how data flows,
+          how profiles are structured, and how per-user encryption keys are derived
+          (HKDF) — keeping profile data isolated and non-transferable. That's novel, defensible IP.
+        </p>
+        <div class="project-tags">
+          <span class="tag">Python</span>
+          <span class="tag">AI / ML</span>
+          <span class="tag">Microservices</span>
+          <span class="tag">Supabase</span>
+          <span class="tag">Vercel</span>
+          <span class="tag">AES-256</span>
+          <span class="tag">AWS KMS</span>
+          <span class="tag">HKDF</span>
+        </div>
+      </div>
+
+      <div class="project-components">
+        <h4>Product Stack</h4>
+        <div class="component-item">
+          <div class="comp-accent aether"></div>
+          <div>
+            <div class="comp-name" style="color:var(--accent)">Aether Behavioral Framework</div>
+            <div class="comp-desc">The governing framework for Veros. Defines how behavioral data is structured, secured, and processed — including per-user encryption key derivation via HKDF. The architecture behind the platform.</div>
+          </div>
+        </div>
+        <div class="component-item">
+          <div class="comp-accent veros"></div>
+          <div>
+            <div class="comp-name" style="color:var(--accent2)">Veros</div>
+            <div class="comp-desc">Intangybl's security awareness simulation platform. Veros encompasses two layers: behavioral profiling (building a per-user model of how someone responds under pressure) and the attack engine (deploying social engineering simulations calibrated to that profile — no recycled templates). Fully deployed with end-to-end testing and scored output.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SKILLS -->
+<section id="skills">
+  <p class="section-label reveal">03 — Skills</p>
+  <h2 class="section-title reveal reveal-delay-1">Technical &amp; Strategic</h2>
+  <div class="skills-grid">
+
+    <div class="skill-group reveal reveal-delay-1">
+      <div class="skill-group-title">Security Practice</div>
+      <div class="skill-list">
+        <div class="skill-item"><span class="skill-name">Security+ / GRC</span><div class="skill-bar"><div class="skill-fill" data-width="92"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Penetration Testing</span><div class="skill-bar"><div class="skill-fill" data-width="75"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Threat Modeling</span><div class="skill-bar"><div class="skill-fill" data-width="80"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Incident Response</span><div class="skill-bar"><div class="skill-fill" data-width="78"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Social Engineering</span><div class="skill-bar"><div class="skill-fill" data-width="90"></div></div></div>
+      </div>
+    </div>
+
+    <div class="skill-group reveal reveal-delay-2">
+      <div class="skill-group-title">Tools &amp; Infrastructure</div>
+      <div class="skill-list">
+        <div class="skill-item"><span class="skill-name">Kali Linux</span><div class="skill-bar"><div class="skill-fill" data-width="80"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Python</span><div class="skill-bar"><div class="skill-fill" data-width="78"></div></div></div>
+        <div class="skill-item"><span class="skill-name">AWS / KMS</span><div class="skill-bar"><div class="skill-fill" data-width="70"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Supabase / PostgreSQL</span><div class="skill-bar"><div class="skill-fill" data-width="65"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Network Configuration</span><div class="skill-bar"><div class="skill-fill" data-width="74"></div></div></div>
+      </div>
+    </div>
+
+    <div class="skill-group reveal reveal-delay-3">
+      <div class="skill-group-title">Governance &amp; Risk</div>
+      <div class="skill-list">
+        <div class="skill-item"><span class="skill-name">NIST CSF</span><div class="skill-bar"><div class="skill-fill" data-width="85"></div></div></div>
+        <div class="skill-item"><span class="skill-name">COSO ERM</span><div class="skill-bar"><div class="skill-fill" data-width="82"></div></div></div>
+        <div class="skill-item"><span class="skill-name">SEC / GDPR / NYDFS</span><div class="skill-bar"><div class="skill-fill" data-width="78"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Risk Advisory</span><div class="skill-bar"><div class="skill-fill" data-width="84"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Cyber Disclosure (SEC)</span><div class="skill-bar"><div class="skill-fill" data-width="80"></div></div></div>
+      </div>
+    </div>
+
+    <div class="skill-group reveal reveal-delay-4">
+      <div class="skill-group-title">Product &amp; Strategy</div>
+      <div class="skill-list">
+        <div class="skill-item"><span class="skill-name">Product Architecture</span><div class="skill-bar"><div class="skill-fill" data-width="82"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Microservices Design</span><div class="skill-bar"><div class="skill-fill" data-width="72"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Enterprise Sales</span><div class="skill-bar"><div class="skill-fill" data-width="68"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Technical Writing</span><div class="skill-bar"><div class="skill-fill" data-width="88"></div></div></div>
+        <div class="skill-item"><span class="skill-name">Startup Operations</span><div class="skill-bar"><div class="skill-fill" data-width="76"></div></div></div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section id="contact">
+  <p class="section-label reveal">04 — Contact</p>
+  <h2 class="section-title reveal reveal-delay-1">Let's talk.</h2>
+  <div class="contact-layout">
+    <div class="contact-intro reveal reveal-delay-2">
+      <p>
+        Whether you're interested in Veros for your organization, exploring
+        collaboration, or considering me for a security role — reach out. I keep responses direct.
+      </p>
+      <div class="contact-links">
+        <a class="contact-link" href="https://linkedin.com/in/" target="_blank">
+          <span class="contact-link-icon">💼</span>
+          LinkedIn — Ronald V. Edwards II
+        </a>
+        <a class="contact-link" href="mailto:rvance609@gmail.com">
+          <span class="contact-link-icon">✉️</span>
+          rvance609@gmail.com
+        </a>
+        <a class="contact-link" href="https://github.com/" target="_blank">
+          <span class="contact-link-icon">⌨️</span>
+          GitHub
+        </a>
+      </div>
+    </div>
+
+    <form class="form" onsubmit="handleSubmit(event)">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div class="form-group">
+          <label class="form-label" for="name">Name</label>
+          <input class="form-input" id="name" type="text" placeholder="Jane Smith" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="org">Organization</label>
+          <input class="form-input" id="org" type="text" placeholder="Company / Role" />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="email">Email</label>
+        <input class="form-input" id="email" type="email" placeholder="you@company.com" required />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="subject">Subject</label>
+        <input class="form-input" id="subject" type="text" placeholder="Veros inquiry / Opportunity / General" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="message">Message</label>
+        <textarea class="form-textarea" id="message" placeholder="What's on your mind?" required></textarea>
+      </div>
+      <button class="btn btn-primary form-submit" type="submit" id="submit-btn">Send Message</button>
+      <p class="form-note" id="form-status"></p>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-left">
+    © 2026 <span>Ronald V. Edwards II</span> · Philadelphia, PA
+  </div>
+  <div class="footer-right">
+    Founder · Intangybl
+  </div>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.12 });
+  reveals.forEach(el => observer.observe(el));
+
+  // Skill bar animation
+  const skillObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.querySelectorAll('.skill-fill').forEach(fill => {
+          const w = fill.getAttribute('data-width');
+          setTimeout(() => { fill.style.width = w + '%'; }, 200);
+        });
+        skillObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.3 });
+  document.querySelectorAll('.skill-group').forEach(el => skillObserver.observe(el));
+
+  // Nav shrink on scroll
+  window.addEventListener('scroll', () => {
+    document.querySelector('nav').style.padding =
+      window.scrollY > 60 ? '1rem 4rem' : '1.5rem 4rem';
+  });
+
+  // Form submission
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submit-btn');
+    const status = document.getElementById('form-status');
+    btn.textContent = 'Sent ✓';
+    btn.style.background = 'var(--accent2)';
+    btn.disabled = true;
+    status.textContent = "Message received. I'll get back to you shortly.";
+    status.style.color = 'var(--accent2)';
+    e.target.reset();
+    setTimeout(() => {
+      btn.textContent = 'Send Message';
+      btn.style.background = '';
+      btn.disabled = false;
+      status.textContent = '';
+    }, 5000);
+  }
+</script>
+</body>
+</html>
